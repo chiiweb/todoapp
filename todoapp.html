@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>taskmaster pro ✨</title>
+    
+    <style>
+        :root {
+            --bg-primary: #f5f7fa;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #f8fafc;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --accent: #667eea;
+            --accent-dark: #764ba2;
+            --urgent: #ef4444;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        [data-theme='dark'] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border-color: #334155;
+        }
+
+        * { box-sizing: border-box; }
+
+        body { 
+            margin: 0; 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            background: var(--bg-primary); 
+            color: var(--text-primary);
+            transition: background 0.3s ease;
+        }
+
+        .container { 
+            max-width: 900px; 
+            margin: 40px auto; 
+            padding: 0 20px; 
+        }
+        
+        .card { 
+            background: var(--bg-secondary); 
+            border-radius: 16px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+            overflow: hidden; 
+        }
+
+        .header { 
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark)); 
+            padding: 30px; 
+            color: white; 
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 { margin: 0; font-size: 28px; }
+        .header small { display: block; opacity: 0.9; margin-top: 5px; font-size: 14px; }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .username-display { font-size: 14px; opacity: 0.9; }
+
+        .btn-theme, .btn-logout {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .btn-logout { background: rgba(239, 68, 68, 0.8); }
+        .btn-logout:hover { background: rgba(239, 68, 68, 1); }
+        .btn-theme:hover { background: rgba(255,255,255,0.3); }
+
+        .stats-bar { 
+            display: grid; 
+            grid-template-columns: repeat(4, 1fr); 
+            background: var(--bg-tertiary); 
+            padding: 20px; 
+            gap: 10px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .stat-num { 
+            font-size: 24px; 
+            font-weight: 800; 
+            display: block; 
+            color: var(--accent);
+        }
+        
+        .stat-label { 
+            font-size: 11px; 
+            color: var(--text-secondary); 
+            text-transform: uppercase; 
+            letter-spacing: 0.5px;
+            margin-top: 5px;
+        }
+
+        .filters {
+            padding: 20px 25px;
+            background: var(--bg-tertiary);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border: 2px solid var(--border-color);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .filter-btn.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .filter-btn:hover:not(.active) {
+            border-color: var(--accent);
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 200px;
+            padding: 10px 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .search-box:focus {
+            border-color: var(--accent);
+            outline: none;
+        }
+
+        .input-group { 
+            padding: 25px; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 12px; 
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .row { display: flex; gap: 10px; }
+        
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="date"],
+        textarea {
+            flex: 1;
+            padding: 14px; 
+            border: 2px solid var(--border-color); 
+            border-radius: 8px; 
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 15px;
+            font-family: inherit;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        input:focus, textarea:focus, select:focus { 
+            border-color: var(--accent); 
+            outline: none; 
+        }
+
+        select {
+            padding: 14px; 
+            border: 2px solid var(--border-color); 
+            border-radius: 8px; 
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 15px;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .btn-add,
+        .btn-primary { 
+            background: var(--accent); 
+            color: white; 
+            border: none; 
+            padding: 14px 28px; 
+            border-radius: 8px; 
+            font-weight: 600; 
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 15px;
+            width: 100%;
+            transition: all 0.2s;
+        }
+
+        .btn-add:hover,
+        .btn-primary:hover {
+            background: var(--accent-dark);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .list { min-height: 200px; }
+
+        .todo-item { 
+            display: flex; 
+            flex-direction: column;
+            padding: 18px 25px; 
+            border-bottom: 1px solid var(--border-color);
+            transition: background 0.2s;
+        }
+
+        .todo-item:hover { background: var(--bg-tertiary); }
+        .todo-item:last-child { border-bottom: none; }
+        
+        .todo-main {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .todo-content { 
+            display: flex; 
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .todo-title {
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .todo-description {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .todo-meta {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        input[type="checkbox"] {
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            accent-color: var(--accent);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .completed-text { 
+            text-decoration: line-through; 
+            opacity: 0.5; 
+        }
+
+        .badge { 
+            font-size: 10px; 
+            padding: 5px 10px; 
+            border-radius: 6px; 
+            color: white; 
+            font-weight: bold;
+            text-transform: uppercase;
+            display: inline-block;
+        }
+
+        .badge-high { background: #ef4444; }
+        .badge-medium { background: #667eea; }
+        .badge-low { background: #10b981; }
+
+        .category-badge {
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            font-weight: 600;
+            border: 1px solid var(--border-color);
+        }
+
+        .due-date {
+            color: var(--text-secondary);
+        }
+
+        .due-date.overdue {
+            color: var(--urgent);
+            font-weight: 600;
+        }
+
+        .due-date.today {
+            color: var(--warning);
+            font-weight: 600;
+        }
+
+        .todo-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-delete, .btn-edit { 
+            background: none; 
+            border: none; 
+            cursor: pointer;
+            padding: 6px 12px;
+            font-size: 13px;
+            border-radius: 6px;
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+
+        .btn-delete {
+            color: var(--urgent);
+        }
+
+        .btn-edit {
+            color: var(--accent);
+        }
+
+        .btn-delete:hover { background: rgba(239, 68, 68, 0.1); }
+        .btn-edit:hover { background: rgba(102, 126, 234, 0.1); }
+
+        .empty-state {
+            text-align: center;
+            color: var(--text-secondary);
+            padding: 60px 20px;
+            font-size: 15px;
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        /* Auth Styles */
+        .auth-container {
+            max-width: 450px;
+            margin: 80px auto;
+            padding: 0 20px;
+        }
+
+        .auth-card {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            padding: 40px;
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .auth-header h2 {
+            margin: 0 0 10px 0;
+            font-size: 28px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .auth-header p {
+            color: var(--text-secondary);
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .message {
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .message.show { display: block; }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--urgent);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .success-message {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .auth-switch {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .auth-switch a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .auth-switch a:hover {
+            text-decoration: underline;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+        }
+
+        .loading-spinner {
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--accent);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hidden { display: none !important; }
+
+        .sort-controls {
+            padding: 15px 25px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            font-size: 13px;
+        }
+
+        .sort-label {
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        @media (max-width: 700px) {
+            .row { flex-direction: column; }
+            .header { padding: 20px; flex-direction: column; gap: 15px; }
+            .header h1 { font-size: 22px; }
+            .user-info { width: 100%; justify-content: space-between; }
+            .stats-bar { grid-template-columns: repeat(2, 1fr); }
+            .filters { flex-direction: column; }
+            .search-box { width: 100%; }
+            .auth-card { padding: 30px 20px; }
+            .todo-actions { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading">
+        <div class="loading-spinner"></div>
+        <p>loading firebase...</p>
+    </div>
+
+    <!-- Auth Screen -->
+    <div id="authScreen" class="auth-container hidden">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h2>✨ taskmaster pro ✨</h2>
+                <p id="authSubtitle">welcome! please sign in</p>
+            </div>
+
+            <div id="messageBox" class="message"></div>
+
+            <!-- Login Form -->
+            <div id="loginForm">
+                <div class="form-group">
+                    <label>email</label>
+                    <input type="email" id="loginEmail" placeholder="your email address">
+                </div>
+                <div class="form-group">
+                    <label>password</label>
+                    <input type="password" id="loginPassword" placeholder="your password">
+                </div>
+                <button class="btn-primary" onclick="doLogin()" id="loginBtn">sign in</button>
+            </div>
+
+            <!-- Signup Form -->
+            <div id="signupForm" class="hidden">
+                <div class="form-group">
+                    <label>email</label>
+                    <input type="email" id="signupEmail" placeholder="your email address">
+                </div>
+                <div class="form-group">
+                    <label>password</label>
+                    <input type="password" id="signupPassword" placeholder="at least 6 characters">
+                </div>
+                <button class="btn-primary" onclick="doSignup()" id="signupBtn">create account</button>
+            </div>
+
+            <div class="auth-switch">
+                <span id="switchText">don't have an account? </span>
+                <a onclick="toggleMode()">sign up</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="appScreen" class="container hidden">
+        <div class="card">
+            <header class="header">
+                <div>
+                    <h1>taskmaster pro ✨</h1>
+                    <small>synced with firebase cloud!</small>
+                </div>
+                <div class="user-info">
+                    <span class="username-display">hi, <strong id="currentUsername"></strong>!</span>
+                    <button class="btn-logout" onclick="doLogout()">logout</button>
+                    <button class="btn-theme" onclick="toggleTheme()">🌙</button>
+                </div>
+            </header>
+
+            <div class="stats-bar">
+                <div>
+                    <span class="stat-num" id="pendingCount">0</span>
+                    <span class="stat-label">pending</span>
+                </div>
+                <div>
+                    <span class="stat-num" id="doneCount">0</span>
+                    <span class="stat-label">completed</span>
+                </div>
+                <div>
+                    <span class="stat-num" id="overdueCount">0</span>
+                    <span class="stat-label">overdue</span>
+                </div>
+                <div>
+                    <span class="stat-num" id="totalCount">0</span>
+                    <span class="stat-label">total</span>
+                </div>
+            </div>
+
+            <div class="filters">
+                <button class="filter-btn active" onclick="filterTasks('all')">all</button>
+                <button class="filter-btn" onclick="filterTasks('active')">active</button>
+                <button class="filter-btn" onclick="filterTasks('completed')">completed</button>
+                <button class="filter-btn" onclick="filterTasks('overdue')">overdue</button>
+                <input type="text" class="search-box" id="searchBox" placeholder="🔍 search tasks..." onkeyup="searchTasks()">
+            </div>
+
+            <div class="sort-controls">
+                <span class="sort-label">sort by:</span>
+                <select id="sortSelect" onchange="sortTasks()">
+                    <option value="newest">newest first</option>
+                    <option value="oldest">oldest first</option>
+                    <option value="priority">priority</option>
+                    <option value="duedate">due date</option>
+                    <option value="category">category</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <input 
+                    type="text" 
+                    id="taskInput" 
+                    placeholder="task title... ✍️"
+                    autocomplete="off"
+                />
+                <textarea 
+                    id="taskDescription" 
+                    placeholder="task description (optional)..."
+                ></textarea>
+                <div class="row">
+                    <select id="prioritySelect">
+                        <option value="low">🟢 low priority</option>
+                        <option value="medium" selected>🟡 medium priority</option>
+                        <option value="high">🔴 high priority</option>
+                    </select>
+                    <select id="categorySelect">
+                        <option value="personal">👤 personal</option>
+                        <option value="work">💼 work</option>
+                        <option value="shopping">🛒 shopping</option>
+                        <option value="health">❤️ health</option>
+                        <option value="study">📚 study</option>
+                        <option value="other">📌 other</option>
+                    </select>
+                </div>
+                <div class="row">
+                    <input type="date" id="dueDateInput" placeholder="due date (optional)">
+                    <button class="btn-add" onclick="addTask()">➕ add task</button>
+                </div>
+            </div>
+
+            <div class="list" id="todoList">
+                <div class="empty-state">
+                    <div class="empty-state-icon">📝</div>
+                    <div>no tasks yet! add one above~</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs - Using CDN with integrity checks -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        // Firebase Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyC0m6-FyYdeRMnUkm9Fu7ysFg6KJ2a3j_8",
+            authDomain: "todoapp-1bcc2.firebaseapp.com",
+            projectId: "todoapp-1bcc2",
+            storageBucket: "todoapp-1bcc2.firebasestorage.app",
+            messagingSenderId: "551825816950",
+            appId: "1:551825816950:web:c2a38a74300b6e16f24e57",
+            measurementId: "G-YR9QXYKSP9"
+        };
+
+        let app, auth, db;
+        let currentUser = null;
+        let isLoginMode = true;
+        let todos = [];
+        let filteredTodos = [];
+        let currentFilter = 'all';
+        let isDark = false;
+        let unsubscribeTodos = null;
+
+        // Initialize Firebase
+        function initFirebase() {
+            try {
+                console.log('initializing firebase...');
+                app = firebase.initializeApp(firebaseConfig);
+                auth = firebase.auth();
+                db = firebase.firestore();
+                
+                console.log('firebase initialized successfully!');
+                
+                // Listen for auth changes
+                auth.onAuthStateChanged(user => {
+                    document.getElementById('loadingScreen').classList.add('hidden');
+                    if (user) {
+                        currentUser = user;
+                        showApp();
+                    } else {
+                        currentUser = null;
+                        showAuth();
+                    }
+                });
+            } catch (error) {
+                console.error('firebase init error:', error);
+                document.getElementById('loadingScreen').classList.add('hidden');
+                showMessage('firebase failed to load! check console', 'error');
+                showAuth();
+            }
+        }
+
+        // Message functions
+        function showMessage(text, type) {
+            const msg = document.getElementById('messageBox');
+            msg.textContent = text;
+            msg.className = 'message show ' + type + '-message';
+            setTimeout(() => msg.classList.remove('show'), 5000);
+        }
+
+        // Toggle login/signup
+        function toggleMode() {
+            isLoginMode = !isLoginMode;
+            if (isLoginMode) {
+                document.getElementById('loginForm').classList.remove('hidden');
+                document.getElementById('signupForm').classList.add('hidden');
+                document.getElementById('authSubtitle').textContent = 'welcome! please sign in';
+                document.getElementById('switchText').textContent = "don't have an account? ";
+            } else {
+                document.getElementById('loginForm').classList.add('hidden');
+                document.getElementById('signupForm').classList.remove('hidden');
+                document.getElementById('authSubtitle').textContent = 'create your account!';
+                document.getElementById('switchText').textContent = 'already have an account? ';
+            }
+        }
+
+        // Login
+        async function doLogin() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const btn = document.getElementById('loginBtn');
+
+            if (!email || !password) {
+                showMessage('please fill in all fields!', 'error');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'signing in...';
+
+            try {
+                await auth.signInWithEmailAndPassword(email, password);
+                showMessage('welcome back!', 'success');
+            } catch (error) {
+                console.error('login error:', error);
+                if (error.code === 'auth/user-not-found') {
+                    showMessage('email not found!', 'error');
+                } else if (error.code === 'auth/wrong-password') {
+                    showMessage('wrong password!', 'error');
+                } else if (error.code === 'auth/invalid-email') {
+                    showMessage('invalid email format!', 'error');
+                } else {
+                    showMessage(error.message, 'error');
+                }
+                btn.disabled = false;
+                btn.textContent = 'sign in';
+            }
+        }
+
+        // Signup
+        async function doSignup() {
+            const email = document.getElementById('signupEmail').value.trim();
+            const password = document.getElementById('signupPassword').value;
+            const btn = document.getElementById('signupBtn');
+
+            if (!email || !password) {
+                showMessage('please fill in all fields!', 'error');
+                return;
+            }
+
+            if (password.length < 6) {
+                showMessage('password must be at least 6 characters!', 'error');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'creating account...';
+
+            try {
+                await auth.createUserWithEmailAndPassword(email, password);
+                showMessage('account created! welcome!', 'success');
+            } catch (error) {
+                console.error('signup error:', error);
+                if (error.code === 'auth/email-already-in-use') {
+                    showMessage('email already in use!', 'error');
+                } else if (error.code === 'auth/invalid-email') {
+                    showMessage('invalid email format!', 'error');
+                } else if (error.code === 'auth/weak-password') {
+                    showMessage('password too weak!', 'error');
+                } else {
+                    showMessage(error.message, 'error');
+                }
+                btn.disabled = false;
+                btn.textContent = 'create account';
+            }
+        }
+
+        // Logout
+        async function doLogout() {
+            if (confirm('logout?')) {
+                try {
+                    if (unsubscribeTodos) {
+                        unsubscribeTodos();
+                        unsubscribeTodos = null;
+                    }
+                    await auth.signOut();
+                } catch (error) {
+                    console.error('logout error:', error);
+                    showMessage('logout failed!', 'error');
+                }
+            }
+        }
+
+        // Show auth
+        function showAuth() {
+            document.getElementById('authScreen').classList.remove('hidden');
+            document.getElementById('appScreen').classList.add('hidden');
+            document.getElementById('loginEmail').value = '';
+            document.getElementById('loginPassword').value = '';
+            document.getElementById('signupEmail').value = '';
+            document.getElementById('signupPassword').value = '';
+        }
+
+        // Show app
+        function showApp() {
+            document.getElementById('authScreen').classList.add('hidden');
+            document.getElementById('appScreen').classList.remove('hidden');
+            
+            const email = currentUser.email;
+            const username = email.split('@')[0];
+            document.getElementById('currentUsername').textContent = username;
+            
+            loadTodos();
+        }
+
+        // Load todos from Firestore (real-time!)
+        function loadTodos() {
+            if (!currentUser) return;
+
+            const todosRef = db.collection('users').doc(currentUser.uid).collection('todos');
+            
+            unsubscribeTodos = todosRef.onSnapshot(snapshot => {
+                todos = [];
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    todos.push({ 
+                        id: doc.id, 
+                        ...data,
+                        createdAt: data.createdAt?.toDate() || new Date()
+                    });
+                });
+                applyFiltersAndSort();
+            }, error => {
+                console.error('load todos error:', error);
+            });
+        }
+
+        // Add task
+        async function addTask() {
+            if (!currentUser) return;
+
+            const input = document.getElementById('taskInput');
+            const text = input.value.trim();
+            if (!text) {
+                showMessage('please enter a task title!', 'error');
+                return;
+            }
+
+            const description = document.getElementById('taskDescription').value.trim();
+            const dueDate = document.getElementById('dueDateInput').value;
+
+            const newTodo = {
+                text: text,
+                description: description,
+                priority: document.getElementById('prioritySelect').value,
+                category: document.getElementById('categorySelect').value,
+                dueDate: dueDate || null,
+                done: false,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+
+            try {
+                await db.collection('users').doc(currentUser.uid).collection('todos').add(newTodo);
+                input.value = '';
+                document.getElementById('taskDescription').value = '';
+                document.getElementById('dueDateInput').value = '';
+                input.focus();
+                showMessage('task added! ✨', 'success');
+            } catch (error) {
+                console.error('add task error:', error);
+                showMessage('failed to add task!', 'error');
+            }
+        }
+
+        // Toggle todo
+        async function toggleTodo(id, currentDone) {
+            if (!currentUser) return;
+
+            try {
+                await db.collection('users').doc(currentUser.uid).collection('todos').doc(id).update({
+                    done: !currentDone
+                });
+            } catch (error) {
+                console.error('toggle todo error:', error);
+            }
+        }
+
+        // Delete todo
+        async function deleteTodo(id) {
+            if (!currentUser) return;
+            if (!confirm('delete this task?')) return;
+
+            try {
+                await db.collection('users').doc(currentUser.uid).collection('todos').doc(id).delete();
+                showMessage('task deleted!', 'success');
+            } catch (error) {
+                console.error('delete todo error:', error);
+                showMessage('failed to delete task!', 'error');
+            }
+        }
+
+        // Filter tasks
+        function filterTasks(filter) {
+            currentFilter = filter;
+            
+            // Update button styles
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            applyFiltersAndSort();
+        }
+
+        // Search tasks
+        function searchTasks() {
+            applyFiltersAndSort();
+        }
+
+        // Sort tasks
+        function sortTasks() {
+            applyFiltersAndSort();
+        }
+
+        // Apply filters and sort
+        function applyFiltersAndSort() {
+            const searchTerm = document.getElementById('searchBox').value.toLowerCase();
+            const sortBy = document.getElementById('sortSelect').value;
+            
+            // Filter
+            filteredTodos = todos.filter(todo => {
+                // Search filter
+                if (searchTerm && !todo.text.toLowerCase().includes(searchTerm) && 
+                    !todo.description?.toLowerCase().includes(searchTerm)) {
+                    return false;
+                }
+                
+                // Status filter
+                if (currentFilter === 'active' && todo.done) return false;
+                if (currentFilter === 'completed' && !todo.done) return false;
+                if (currentFilter === 'overdue' && (!todo.dueDate || todo.done || !isOverdue(todo.dueDate))) return false;
+                
+                return true;
+            });
+            
+            // Sort
+            filteredTodos.sort((a, b) => {
+                if (sortBy === 'newest') {
+                    return b.createdAt - a.createdAt;
+                } else if (sortBy === 'oldest') {
+                    return a.createdAt - b.createdAt;
+                } else if (sortBy === 'priority') {
+                    const priorityOrder = { high: 0, medium: 1, low: 2 };
+                    return priorityOrder[a.priority] - priorityOrder[b.priority];
+                } else if (sortBy === 'duedate') {
+                    if (!a.dueDate) return 1;
+                    if (!b.dueDate) return -1;
+                    return new Date(a.dueDate) - new Date(b.dueDate);
+                } else if (sortBy === 'category') {
+                    return a.category.localeCompare(b.category);
+                }
+                return 0;
+            });
+            
+            renderTodos();
+        }
+
+        // Check if overdue
+        function isOverdue(dueDate) {
+            if (!dueDate) return false;
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const due = new Date(dueDate);
+            due.setHours(0, 0, 0, 0);
+            return due < today;
+        }
+
+        // Check if due today
+        function isDueToday(dueDate) {
+            if (!dueDate) return false;
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const due = new Date(dueDate);
+            due.setHours(0, 0, 0, 0);
+            return due.getTime() === today.getTime();
+        }
+
+        // Format date
+        function formatDate(date) {
+            if (!date) return '';
+            const d = new Date(date);
+            return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        }
+
+        // Format created date
+        function formatCreatedDate(date) {
+            if (!date) return '';
+            const d = date instanceof Date ? date : new Date(date);
+            const now = new Date();
+            const diff = now - d;
+            const minutes = Math.floor(diff / 60000);
+            const hours = Math.floor(diff / 3600000);
+            const days = Math.floor(diff / 86400000);
+            
+            if (minutes < 1) return 'just now';
+            if (minutes < 60) return `${minutes}m ago`;
+            if (hours < 24) return `${hours}h ago`;
+            if (days < 7) return `${days}d ago`;
+            return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        }
+
+        // Render todos
+        function renderTodos() {
+            const list = document.getElementById('todoList');
+            
+            if (filteredTodos.length === 0) {
+                list.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📝</div><div>no tasks found!</div></div>';
+                updateStats();
+                return;
+            }
+
+            list.innerHTML = '';
+            filteredTodos.forEach(todo => {
+                const div = document.createElement('div');
+                div.className = 'todo-item';
+                
+                let dueDateHtml = '';
+                if (todo.dueDate) {
+                    const overdue = isOverdue(todo.dueDate);
+                    const today = isDueToday(todo.dueDate);
+                    const dateClass = overdue ? 'overdue' : (today ? 'today' : '');
+                    dueDateHtml = `<span class="meta-item due-date ${dateClass}">📅 ${formatDate(todo.dueDate)}${overdue ? ' (overdue!)' : today ? ' (today!)' : ''}</span>`;
+                }
+                
+                const categoryEmojis = {
+                    personal: '👤',
+                    work: '💼',
+                    shopping: '🛒',
+                    health: '❤️',
+                    study: '📚',
+                    other: '📌'
+                };
+                
+                div.innerHTML = `
+                    <div class="todo-main">
+                        <input type="checkbox" ${todo.done ? 'checked' : ''} onchange="toggleTodo('${todo.id}', ${todo.done})">
+                        <div class="todo-content">
+                            <div class="todo-title ${todo.done ? 'completed-text' : ''}">
+                                ${escapeHtml(todo.text)}
+                                <span class="badge badge-${todo.priority}">${todo.priority}</span>
+                                <span class="category-badge">${categoryEmojis[todo.category]} ${todo.category}</span>
+                            </div>
+                            ${todo.description ? `<div class="todo-description ${todo.done ? 'completed-text' : ''}">${escapeHtml(todo.description)}</div>` : ''}
+                            <div class="todo-meta">
+                                <span class="meta-item">🕐 created ${formatCreatedDate(todo.createdAt)}</span>
+                                ${dueDateHtml}
+                            </div>
+                        </div>
+                        <div class="todo-actions">
+                            <button class="btn-delete" onclick="deleteTodo('${todo.id}')">🗑️ delete</button>
+                        </div>
+                    </div>
+                `;
+                list.appendChild(div);
+            });
+
+            updateStats();
+        }
+
+        // Escape HTML
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Update stats
+        function updateStats() {
+            const pending = todos.filter(t => !t.done).length;
+            const done = todos.filter(t => t.done).length;
+            const overdue = todos.filter(t => !t.done && t.dueDate && isOverdue(t.dueDate)).length;
+            
+            document.getElementById('pendingCount').textContent = pending;
+            document.getElementById('doneCount').textContent = done;
+            document.getElementById('overdueCount').textContent = overdue;
+            document.getElementById('totalCount').textContent = todos.length;
+        }
+
+        // Toggle theme
+        function toggleTheme() {
+            isDark = !isDark;
+            if (isDark) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                document.querySelector('.btn-theme').textContent = '☀️';
+                localStorage.setItem('tm_theme', 'dark');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'light');
+                document.querySelector('.btn-theme').textContent = '🌙';
+                localStorage.setItem('tm_theme', 'light');
+            }
+        }
+
+        // Init theme
+        const savedTheme = localStorage.getItem('tm_theme');
+        if (savedTheme === 'dark') {
+            isDark = true;
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+
+        // Wait for Firebase to load, then initialize
+        setTimeout(function() {
+            if (typeof firebase !== 'undefined') {
+                console.log('firebase loaded from cdn!');
+                initFirebase();
+            } else {
+                console.error('firebase failed to load from cdn!');
+                document.getElementById('loadingScreen').innerHTML = '<div style="padding: 40px; text-align: center; color: #ef4444;"><h3>❌ firebase failed to load!</h3><p>please check your internet connection and refresh the page</p></div>';
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
